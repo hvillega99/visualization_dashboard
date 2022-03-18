@@ -4,30 +4,22 @@ import altair as alt
 
 st.title('Exportaciones no petroleras de Ecuador a Estados Unidos')
 
+trad_tipo_mes = pd.read_csv('./data/trad_tipo_mes.csv')
+no_trad_tipo_mes = pd.read_csv('./data/no_trad_tipo_mes.csv')
 
-df_tradicionales = pd.read_csv('dataset_tradicionales.csv')
-df_no_tradicionales = pd.read_csv('dataset_noTradicionales.csv')
+trad_total_mes = pd.read_csv('./data/trad_total_mes.csv')
+no_trad_total_mes = pd.read_csv('./data/no_trad_total_mes.csv')
 
 year = st.slider('Año', min_value=2001, max_value=2021, value=2001, step=1)
 
-tradi = pd.read_csv('tradicionales.csv')
-tradi = tradi[tradi['Año'] == year]
+trad_tipo_mes = trad_tipo_mes[trad_tipo_mes['Año'] == year]
+no_trad_tipo_mes = no_trad_tipo_mes[no_trad_tipo_mes['Año'] == year]
 
-no_tradi = pd.read_csv('no_tradicionales.csv')
-no_tradi = no_tradi[no_tradi['Año'] == year]
+no_trad_total_mes = no_trad_total_mes[no_trad_total_mes['Año'] == year]
+trad_total_mes = trad_total_mes[trad_total_mes['Año'] == year]
 
-tradicionales_por_mes = pd.read_csv('tradicionales_total.csv')
-tradicionales_por_mes = tradicionales_por_mes[tradicionales_por_mes['Año']==year]
-
-no_tradicionales_por_mes = pd.read_csv('no_tradicionales_total.csv')
-no_tradicionales_por_mes = no_tradicionales_por_mes[no_tradicionales_por_mes['Año']==year]
-
-tradicionales = df_tradicionales[df_tradicionales['Año'] == year]
-no_tradicionales = df_no_tradicionales[df_no_tradicionales['Año'] == year]
-
-
-tradicionales_total = tradicionales['Toneladas'].sum()
-no_tradicionales_total = no_tradicionales['Toneladas'].sum()
+tradicionales_total = trad_total_mes['Toneladas'].sum()
+no_tradicionales_total = no_trad_total_mes['Toneladas'].sum()
 
 st.header('Indicadores anuales')
 col1, col2, col3 = st.columns(3)
@@ -42,7 +34,7 @@ with col3:
 
 st.header('Exportaciones totales')
 
-line1 = alt.Chart(tradicionales_por_mes).mark_line(color="Orange").encode(
+line1 = alt.Chart(trad_total_mes).mark_line(color="Orange").encode(
     x = 'Mes',
     y = 'Toneladas',
     tooltip = ['Mes', 'Toneladas']
@@ -50,7 +42,7 @@ line1 = alt.Chart(tradicionales_por_mes).mark_line(color="Orange").encode(
 
 st.altair_chart(line1)
 
-line2 = alt.Chart(no_tradicionales_por_mes).mark_line(color="Green").encode(
+line2 = alt.Chart(no_trad_total_mes).mark_line(color="Green").encode(
     x = 'Mes',
     y = 'Toneladas',
     tooltip = ['Mes', 'Toneladas']
@@ -62,10 +54,10 @@ st.header('Exportaciones por producto')
 
 st.markdown('##### Productos tradicionales')
 
-valores = tradicionales['Producto']
+valores = set(trad_tipo_mes['Producto'].to_list())
 seleccion = st.selectbox('Elija un producto:',valores)
 
-line3 = alt.Chart(tradi[tradi['Producto'] == seleccion]).mark_line().encode(
+line3 = alt.Chart(trad_tipo_mes[trad_tipo_mes['Producto'] == seleccion]).mark_line().encode(
     x = 'Mes',
     y = 'Toneladas',
     tooltip = ['Mes', 'Toneladas']
@@ -75,10 +67,10 @@ st.altair_chart(line3)
 
 st.markdown('##### Productos no tradicionales')
 
-valores2 = no_tradicionales['Producto']
+valores2 = set(no_trad_tipo_mes['Producto'].to_list())
 seleccion2 = st.selectbox('Elija un producto:',valores2)
 
-line4 = alt.Chart(no_tradi[no_tradi['Producto'] == seleccion2]).mark_line(color="Red").encode(
+line4 = alt.Chart(no_trad_tipo_mes[no_trad_tipo_mes['Producto'] == seleccion2]).mark_line(color="Red").encode(
     x = 'Mes',
     y = 'Toneladas',
     tooltip = ['Mes', 'Toneladas']
