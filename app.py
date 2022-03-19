@@ -48,13 +48,13 @@ pieAlt = alt.Chart(df).mark_arc().encode(
 st.altair_chart(pieAlt, use_container_width=True)
     
 
-st.header('Exportaciones totales')
+st.header(f"Exportaciones por mes del {year}")
 
 line1 = alt.Chart(trad_total_mes).mark_line(color="Orange").encode(
     x = alt.X('Mes', sort=None),
     y = 'Toneladas',
     tooltip = ['Mes', 'Toneladas']
-).properties(title = f"Productos tradicionales exportados en el {year}")
+).properties(title = "Exportaciones de productos tradicionales")
 
 st.altair_chart(line1, use_container_width=True)
 
@@ -62,11 +62,11 @@ line2 = alt.Chart(no_trad_total_mes).mark_line(color="Green").encode(
     x = alt.X('Mes', sort=None),
     y = 'Toneladas',
     tooltip = ['Mes', 'Toneladas']
-).properties(title = f"Productos no tradicionales exportados en el {year}")
+).properties(title = "Exportaciones de productos no tradicionales")
 
 st.altair_chart(line2, use_container_width=True)
 
-st.header('Exportaciones por producto')
+st.header(f"Exportaciones por producto del {year}")
 
 valores = set(trad_tipo_mes['Producto'].to_list())
 seleccion = st.selectbox('Elija un producto tradicional:',valores)
@@ -75,7 +75,7 @@ line3 = alt.Chart(trad_tipo_mes[trad_tipo_mes['Producto'] == seleccion]).mark_li
     x = alt.X('Mes', sort=None),
     y = 'Toneladas',
     tooltip = ['Mes', 'Toneladas']
-).properties(title = f"Exportaciones de {seleccion} en el {year}")
+).properties(title = f"Exportaciones de {seleccion}")
 
 st.altair_chart(line3, use_container_width=True)
 
@@ -86,6 +86,6 @@ line4 = alt.Chart(no_trad_tipo_mes[no_trad_tipo_mes['Producto'] == seleccion2]).
     x = alt.X('Mes', sort=None),
     y = 'Toneladas',
     tooltip = ['Mes', 'Toneladas']
-).properties(title = f"Exportaciones de {seleccion2} en el {year}")
+).properties(title = f"Exportaciones de {seleccion2}")
 
 st.altair_chart(line4, use_container_width=True)
