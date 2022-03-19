@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import altair as alt
+import plotly.express as px
 
 st.title('Exportaciones no petroleras de Ecuador a Estados Unidos')
 
@@ -23,14 +24,26 @@ no_tradicionales_total = no_trad_total_mes['Toneladas'].sum()
 
 st.header('Indicadores anuales')
 col1, col2, col3 = st.columns(3)
-col1.metric("Productos tradicionales", f"{round(tradicionales_total, 2)} t")
-col2.metric("Productos no tradicionales", f"{round(no_tradicionales_total, 2)} t")
+col1.metric("Productos tradicionales", f" {'{:,}'.format(round(tradicionales_total, 2)).replace(',', ' ')} t")
+col2.metric("Productos no tradicionales", f" {'{:,}'.format(round(no_tradicionales_total, 2)).replace(',', ' ')} t")
 
 df = pd.DataFrame({'Categoría': ['Tradicional', 'No tradicional'], 'Toneladas': [tradicionales_total, no_tradicionales_total]})
 
 with col3:
-    bar = alt.Chart(df).mark_bar().encode(y='Categoría', x='Toneladas', tooltip = ['Categoría', 'Toneladas']).properties(width = 250).interactive()
-    st.altair_chart(bar)
+
+    pieAlt = alt.Chart(df).mark_arc().encode(
+        theta=alt.Theta(field="Toneladas", type="quantitative"),
+        color=alt.Color(field="Categoría", type="nominal"),
+        tooltip = ['Categoría', 'Toneladas']
+    ).properties(width = 250)
+    st.altair_chart(pieAlt)
+    
+    #bar = alt.Chart(df).mark_bar().encode(y='Categoría', x='Toneladas', tooltip = ['Categoría', 'Toneladas']).properties(width = 250).interactive()
+    #st.altair_chart(bar)
+
+    #PIE plotly.express
+    #pie = px.pie(df,values='Toneladas', names='Categoría')
+    #st.plotly_chart(pie)
 
 st.header('Exportaciones totales')
 
