@@ -54,7 +54,7 @@ line1 = alt.Chart(trad_total_mes).mark_line(color="Orange").encode(
     x = alt.X('Mes', sort=None),
     y = 'Toneladas',
     tooltip = ['Mes', 'Toneladas']
-).properties(title = f"Exportaciones de productos tradicionales en el {year}")
+).properties(title = f"Productos tradicionales exportados en el {year}")
 
 st.altair_chart(line1, use_container_width=True)
 
@@ -62,7 +62,7 @@ line2 = alt.Chart(no_trad_total_mes).mark_line(color="Green").encode(
     x = alt.X('Mes', sort=None),
     y = 'Toneladas',
     tooltip = ['Mes', 'Toneladas']
-).properties(title = f"Exportaciones de productos no tradicionales en el {year}")
+).properties(title = f"Productos no tradicionales exportados en el {year}")
 
 st.altair_chart(line2, use_container_width=True)
 
