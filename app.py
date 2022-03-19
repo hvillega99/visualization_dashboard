@@ -34,18 +34,21 @@ tradicionales_total = trad_total_mes['Toneladas'].sum()
 no_tradicionales_total = no_trad_total_mes['Toneladas'].sum()
 
 st.header('Indicadores anuales')
-col1, col2 = st.columns(2)
+col1, col2, col3 = st.columns(3)
 col1.metric("Productos tradicionales", f" {'{:,}'.format(round(tradicionales_total, 2)).replace(',', ' ')} t")
 col2.metric("Productos no tradicionales", f" {'{:,}'.format(round(no_tradicionales_total, 2)).replace(',', ' ')} t")
 
 df = pd.DataFrame({'Categoría': ['Tradicional', 'No tradicional'], 'Toneladas': [tradicionales_total, no_tradicionales_total]})
 
-pieAlt = alt.Chart(df).mark_arc().encode(
-    theta=alt.Theta(field="Toneladas", type="quantitative"),
-    color=alt.Color(field="Categoría", type="nominal"),
-    tooltip = ['Categoría', 'Toneladas']
-).properties(height= 150, title=f"Exportaciones en el {year}")
-st.altair_chart(pieAlt, use_container_width=True)
+with col3:
+    pieAlt = alt.Chart(df).mark_arc().encode(
+        theta=alt.Theta(field="Toneladas", type="quantitative"),
+        color=alt.Color(field="Categoría", type="nominal"),
+        tooltip = ['Categoría', 'Toneladas']
+    ).properties(height= 100).configure_view(
+        strokeWidth=0
+    )
+    st.altair_chart(pieAlt, use_container_width=True)
     
 
 st.header(f"Exportaciones por mes del {year}")
