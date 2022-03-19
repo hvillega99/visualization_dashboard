@@ -44,7 +44,7 @@ pieAlt = alt.Chart(df).mark_arc().encode(
     theta=alt.Theta(field="Toneladas", type="quantitative"),
     color=alt.Color(field="Categoría", type="nominal"),
     tooltip = ['Categoría', 'Toneladas']
-).properties(height= 150)
+).properties(height= 150, title=f"Exportaciones en el {year}")
 st.altair_chart(pieAlt, use_container_width=True)
     
 
@@ -54,7 +54,7 @@ line1 = alt.Chart(trad_total_mes).mark_line(color="Orange").encode(
     x = alt.X('Mes', sort=None),
     y = 'Toneladas',
     tooltip = ['Mes', 'Toneladas']
-).properties(title = "Productos tradicionales")
+).properties(title = f"Exportaciones de productos tradicionales en el {year}")
 
 st.altair_chart(line1, use_container_width=True)
 
@@ -62,34 +62,30 @@ line2 = alt.Chart(no_trad_total_mes).mark_line(color="Green").encode(
     x = alt.X('Mes', sort=None),
     y = 'Toneladas',
     tooltip = ['Mes', 'Toneladas']
-).properties(title = "Productos no tradicionales")
+).properties(title = f"Exportaciones de productos no tradicionales en el {year}")
 
 st.altair_chart(line2, use_container_width=True)
 
 st.header('Exportaciones por producto')
 
-st.markdown('##### Productos tradicionales')
-
 valores = set(trad_tipo_mes['Producto'].to_list())
-seleccion = st.selectbox('Elija un producto:',valores)
+seleccion = st.selectbox('Elija un producto tradicional:',valores)
 
 line3 = alt.Chart(trad_tipo_mes[trad_tipo_mes['Producto'] == seleccion]).mark_line().encode(
     x = alt.X('Mes', sort=None),
     y = 'Toneladas',
     tooltip = ['Mes', 'Toneladas']
-).properties(width = 650)
+).properties(title = f"Exportaciones de {seleccion} en el {year}")
 
 st.altair_chart(line3, use_container_width=True)
 
-st.markdown('##### Productos no tradicionales')
-
 valores2 = set(no_trad_tipo_mes['Producto'].to_list())
-seleccion2 = st.selectbox('Elija un producto:',valores2)
+seleccion2 = st.selectbox('Elija un producto no  tradicional:',valores2)
 
 line4 = alt.Chart(no_trad_tipo_mes[no_trad_tipo_mes['Producto'] == seleccion2]).mark_line(color="Red").encode(
     x = alt.X('Mes', sort=None),
     y = 'Toneladas',
     tooltip = ['Mes', 'Toneladas']
-).properties(width = 650)
+).properties(title = f"Exportaciones de {seleccion2} en el {year}")
 
 st.altair_chart(line4, use_container_width=True)
